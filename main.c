@@ -70,7 +70,7 @@ void send_data(ssh_message msg, ssh_session sesh) {
 
 	/* send attacker data to database */
 	char buf[1000];
-	snprintf(buf, sizeof(buf), "{\"timestamp\":\"%d, \"username\":\"%s\", \"password\":\"%s\", \"srcip\":\"%s\", \"dstip\":\"%s\"}", 
+	snprintf(buf, sizeof(buf), "{\"timestamp\":%d, \"username\":\"%s\", \"password\":\"%s\", \"srcip\":\"%s\", \"dstip\":\"%s\"}", 
 			inttime, user, pass, clientip, LOCALHOST);
 	
 
