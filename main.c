@@ -54,7 +54,7 @@ void send_data(ssh_message msg, ssh_session sesh) {
 	char clientip[MAXBUFFER];
 	struct sockaddr_in sock;
 	unsigned int len = sizeof(sock);
-	if(getpeername(ssh_get_fd(sesh), &sock, &len) == 0) {
+	if(getpeername(ssh_get_fd(sesh), (struct sockaddr *) &sock, &len) == 0) {
 		//sock = (struct sockaddr_in)&temp;
 		inet_ntop(AF_INET, &sock.sin_addr, clientip, sizeof(clientip));
 	}
@@ -63,15 +63,13 @@ void send_data(ssh_message msg, ssh_session sesh) {
 	}
 
 	/* Grab time from system*/
-	char* strtime;
 	time_t t;
 	t = time(NULL);
-	int inttime = strftime(strtime, MAXBUFFER, "%Y-%m-%d %H:%M:%S", gmtime(&t));
 
 	/* send attacker data to database */
 	char buf[1000];
-	snprintf(buf, sizeof(buf), "{\"timestamp\":%d, \"username\":\"%s\", \"password\":\"%s\", \"srcip\":\"%s\", \"dstip\":\"%s\"}", 
-			inttime, user, pass, clientip, LOCALHOST);
+	snprintf(buf, sizeof(buf), "{\"timestamp\":%ld, \"username\":\"%s\", \"password\":\"%s\", \"srcip\":\"%s\", \"dstip\":\"%s\"}", 
+			t, user, pass, clientip, LOCALHOST);
 	
 
 	//snprintf(buf, sizeof(buf), "Hello World\n");
